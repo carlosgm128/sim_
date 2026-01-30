@@ -1,51 +1,21 @@
-import { useEffect, useState } from 'react'
+import { BrowserRouter, Route, Routes } from "react-router";
+import { Feed, Users } from './pages'
+import { Navbar } from './components/navigaton/Navbar';
 import './App.css'
-import { getAllUsers } from './api/services/userServices.js';
-import { User } from '../src/components/user/User.jsx';
 
 function App() {
-  
-
-  const [user, setUsers] = useState([])
-  const [query, setQuery] = useState("")
-
-
-  useEffect(() => {
-    getAllUsers().then((data) => {
-       setUsers(data);
-    });
-  }, [])
-
-
-  const handleChange = (event) => {
-    console.log(event.target.value);
-    setQuery(event.target.value);
-  }
-
-  const handleSearch = (event) => {
-    if (!event) return;
-    event.preventDefault();
-    if (!query) {
-      getAllUsers().then((data) => {
-        setUsers(data);
-      });
-      return;
-    }
-    const result = user.filter((u) => u.name.toLowerCase().includes(query.toLowerCase()));
-    setUsers(result);
-  }
-
   return (
-    <>
-    <form onSubmit={handleSearch}>
-      <input type="text" placeholder="Search..." onChange={handleChange} />
-
-      <input type="submit" value="Search" />
-    </form>
-
-    {user.map((u) => (<User key={u.id} {...u} />
-    ))}
-    </>
+    <BrowserRouter>
+      <div className="app-layout">
+        <Navbar />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Feed />} />
+            <Route path="/users" element={<Users />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   )
 }
 
